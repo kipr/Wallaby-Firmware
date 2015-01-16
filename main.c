@@ -162,9 +162,7 @@ void init180MHz()
     RCC_SYSCLKConfig(RCC_SYSCLKSource_PLLCLK);
   
     // Wait till PLL is used as system clock source
-    while(RCC_GetSYSCLKSource() != 0x08)
-    {
-    }
+    while(RCC_GetSYSCLKSource() != 0x08);
 }
 
 
@@ -303,33 +301,31 @@ void setupAccelMag()
     regval = SPI3_write(0x00); // write dummy val to get contents
     SPI3_CS0_PORT->BSRRL |= SPI3_CS0; // chip select low
 
-    if (regval == 73)
-    {
-      debug_printf("Accel/Magn identified itself\n");
-    } else
-    {
-      debug_printf("Accel/Magn did not respond/identify itself (regval=%d)\n",regval);
-      return;
+    if (regval == 73){
+        debug_printf("Accel/Magn identified itself\n");
+    }else{
+        debug_printf("Accel/Magn did not respond/identify itself (regval=%d)\n",regval);
+        return;
     }
 
     // accel
-        SPI3_CS0_PORT->BSRRH |= SPI3_CS0; // chip select low
+    SPI3_CS0_PORT->BSRRH |= SPI3_CS0; // chip select low
     SPI3_write(0x20);
     SPI3_write(0x57); // 50hz continuous, all axes
-        SPI3_CS0_PORT->BSRRL |= SPI3_CS0; // done with chip
+    SPI3_CS0_PORT->BSRRL |= SPI3_CS0; // done with chip
 
-        SPI3_CS0_PORT->BSRRH |= SPI3_CS0; // chip select low
+    SPI3_CS0_PORT->BSRRH |= SPI3_CS0; // chip select low
     SPI3_write(0x21);
     SPI3_write(0x00);  // 773Hz filter, +/- 2g scale, no self test, full duplex SPI
     SPI3_CS0_PORT->BSRRL |= SPI3_CS0; // done with chip
 
     // magnetometer
-        SPI3_CS0_PORT->BSRRH |= SPI3_CS0; // chip select low
+    SPI3_CS0_PORT->BSRRH |= SPI3_CS0; // chip select low
     SPI3_write(0x24);
     SPI3_write(0x70); // temp disabled, high res, 50Hz, no interrupts
-        SPI3_CS0_PORT->BSRRL |= SPI3_CS0; // done with chip
+    SPI3_CS0_PORT->BSRRL |= SPI3_CS0; // done with chip
 
-        SPI3_CS0_PORT->BSRRH |= SPI3_CS0; // chip select low
+    SPI3_CS0_PORT->BSRRH |= SPI3_CS0; // chip select low
     SPI3_write(0x25);
     SPI3_write(0x20);  // +/- 4g
     SPI3_CS0_PORT->BSRRL |= SPI3_CS0; // done with chip
@@ -397,11 +393,9 @@ void setupGyro()
     regval = SPI3_write(0x00); // write dummy val to get contents
     SPI3_CS1_PORT->BSRRL |= SPI3_CS1; // chip select low
 
-    if (regval == 211)
-    {
+    if (regval == 211){
       debug_printf("Gyro identified itself\n");
-    } else
-    {
+    }else{
       debug_printf("Gyro did not respond/identify itself (regval=%d)\n",regval);
       return;
     }
@@ -590,8 +584,7 @@ void main(void)
 
 /*
 
-    for (unsigned int cycles = 0; cycles < 100; ++cycles)
-    {
+    for (unsigned int cycles = 0; cycles < 100; ++cycles){
         SRV0_PWM_PORT->BSRRL |= SRV0_PWM;
         SRV1_PWM_PORT->BSRRL |= SRV1_PWM;
         SRV2_PWM_PORT->BSRRL |= SRV2_PWM;
@@ -630,8 +623,7 @@ void main(void)
 
 
 
-    for (unsigned int cycles = 0; cycles < 100; ++cycles)
-    {
+    for (unsigned int cycles = 0; cycles < 100; ++cycles){
     
         // LED off (set pin high)
         LED1_PORT->BSRRL |= LED1_PIN;
@@ -658,7 +650,7 @@ void main(void)
         if (cycles < 100000){
             delay_us(45);
         }else{
-          delay_us(25);
+            delay_us(25);
         }
         */
 
@@ -668,7 +660,8 @@ void main(void)
         //MOT0_DIR2_PORT->BSRRH |= MOT0_DIR2;
 
         /*
-        if (wait < 50){
+        if (wait < 50)
+        {
               MOT0_PWM_PORT->BSRRH |= MOT0_PWM;
               MOT1_PWM_PORT->BSRRH |= MOT1_PWM;
               delay_us(50 - wait);
