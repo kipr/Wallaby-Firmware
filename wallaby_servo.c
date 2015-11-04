@@ -87,3 +87,32 @@ void TIM9_Configuration(void)
   /* TIM4 enable counter */
   TIM_Cmd(TIM9, ENABLE);
 }
+
+void TIM3_IRQHandler(void)
+{
+    if (TIM_GetITStatus(TIM3, TIM_IT_Update) != RESET)
+    {
+        TIM_ClearITPendingBit(TIM3, TIM_IT_Update);
+
+        uint32_t servo0_cmd = (((uint32_t)aTxBuffer[REG_RW_SERVO_0_H]) << 8) | ((uint32_t)aTxBuffer[REG_RW_SERVO_0_L]);
+        uint32_t servo1_cmd = (((uint32_t)aTxBuffer[REG_RW_SERVO_1_H]) << 8) | ((uint32_t)aTxBuffer[REG_RW_SERVO_1_L]);
+
+        TIM_SetCompare1(TIM3, servo0_cmd);
+        TIM_SetCompare2(TIM3, servo1_cmd);
+    }
+}
+
+
+void TIM1_BRK_TIM9_IRQHandler(void)
+{
+    if (TIM_GetITStatus(TIM9, TIM_IT_Update) != RESET)
+    {
+        TIM_ClearITPendingBit(TIM9, TIM_IT_Update);
+
+        uint32_t servo2_cmd = (((uint32_t)aTxBuffer[REG_RW_SERVO_2_H]) << 8) | ((uint32_t)aTxBuffer[REG_RW_SERVO_2_L]);
+        uint32_t servo3_cmd = (((uint32_t)aTxBuffer[REG_RW_SERVO_3_H]) << 8) | ((uint32_t)aTxBuffer[REG_RW_SERVO_3_L]);
+
+        TIM_SetCompare1(TIM9, servo2_cmd);
+        TIM_SetCompare2(TIM9, servo3_cmd);
+    }
+}
