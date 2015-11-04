@@ -18,66 +18,7 @@
 
 #include "wallaby.h"
 
-volatile uint8_t aTxBuffer[REG_ALL_COUNT]; // =  {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A};  //"SPI Master/Slave : Communication between two SPI using DMA";
-__IO uint8_t aRxBuffer [REG_ALL_COUNT];
-
  
-
-void TIM1_CC_IRQHandler(void)
-{
-    if (TIM_GetITStatus(TIM1, TIM_IT_CC1  ) != RESET)
-    {
-        TIM_ClearITPendingBit(TIM1, TIM_IT_CC1);
-        uint32_t mot0_cmd = (((uint32_t)(aTxBuffer[REG_RW_MOT_0_PWM_H])) << 8) | ((uint32_t)(aTxBuffer[REG_RW_MOT_0_PWM_L]));
-        uint32_t mot1_cmd = (((uint32_t)aTxBuffer[REG_RW_MOT_1_PWM_H]) << 8) | ((uint32_t)aTxBuffer[REG_RW_MOT_1_PWM_L]);
-        uint32_t mot2_cmd = (((uint32_t)aTxBuffer[REG_RW_MOT_2_PWM_H]) << 8) | ((uint32_t)aTxBuffer[REG_RW_MOT_2_PWM_L]);
-        
-        TIM_SetCompare1(TIM1, mot0_cmd);
-        TIM_SetCompare2(TIM1, mot1_cmd);      
-        TIM_SetCompare3(TIM1, mot2_cmd);
-    }
-}
-
-void TIM3_IRQHandler(void)
-{
-    if (TIM_GetITStatus(TIM3, TIM_IT_Update) != RESET)
-    {
-        TIM_ClearITPendingBit(TIM3, TIM_IT_Update);
-
-        uint32_t servo0_cmd = (((uint32_t)aTxBuffer[REG_RW_SERVO_0_H]) << 8) | ((uint32_t)aTxBuffer[REG_RW_SERVO_0_L]);
-        uint32_t servo1_cmd = (((uint32_t)aTxBuffer[REG_RW_SERVO_1_H]) << 8) | ((uint32_t)aTxBuffer[REG_RW_SERVO_1_L]);
-
-        TIM_SetCompare1(TIM3, servo0_cmd);
-        TIM_SetCompare2(TIM3, servo1_cmd);
-    }
-}
-
-void TIM8_CC_IRQHandler(void)
-{
-    if (TIM_GetITStatus(TIM8, TIM_IT_CC2) != RESET)
-    {
-        TIM_ClearITPendingBit(TIM8, TIM_IT_CC2);
-
-        uint32_t mot3_cmd = (((uint32_t)aTxBuffer[REG_RW_MOT_3_PWM_H]) << 8) | ((uint32_t)aTxBuffer[REG_RW_MOT_3_PWM_L]);
-
-        TIM_SetCompare1(TIM8, mot3_cmd);
-    }
-}
-
-void TIM1_BRK_TIM9_IRQHandler(void)
-{
-    if (TIM_GetITStatus(TIM9, TIM_IT_Update) != RESET)
-    {
-        TIM_ClearITPendingBit(TIM9, TIM_IT_Update);
-
-        uint32_t servo2_cmd = (((uint32_t)aTxBuffer[REG_RW_SERVO_2_H]) << 8) | ((uint32_t)aTxBuffer[REG_RW_SERVO_2_L]);
-        uint32_t servo3_cmd = (((uint32_t)aTxBuffer[REG_RW_SERVO_3_H]) << 8) | ((uint32_t)aTxBuffer[REG_RW_SERVO_3_L]);
-
-        TIM_SetCompare1(TIM9, servo2_cmd);
-        TIM_SetCompare2(TIM9, servo3_cmd);
-    }
-}
-
 
 int main()
 {

@@ -1,8 +1,8 @@
 #include "wallaby.h"
 
 
-//volatile uint8_t aTxBuffer[REG_ALL_COUNT]; // =  {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A};  //"SPI Master/Slave : Communication between two SPI using DMA";
-//__IO uint8_t aRxBuffer [REG_ALL_COUNT];
+volatile uint8_t aTxBuffer[REG_ALL_COUNT]; // =  {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A};  //"SPI Master/Slave : Communication between two SPI using DMA";
+__IO uint8_t aRxBuffer [REG_ALL_COUNT];
  
 
 // TODO: timings based on a 32 bit usec clock would overflow and maybe glitch every 1.19 hours

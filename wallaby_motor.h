@@ -16,3 +16,6 @@ void motor_update(int16_t bemf_val, pid_struct * pids, uint8_t channel, uint8_t 
 void TIM1_Configuration(void);
 void TIM8_Configuration(void);
 
+
+void TIM1_CC_IRQHandler(void);
+void TIM8_CC_IRQHandler(void);

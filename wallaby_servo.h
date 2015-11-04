@@ -9,4 +9,8 @@ void TIM3_Configuration(void);
 
 void TIM9_Configuration(void);
 
+void TIM3_IRQHandler(void);
+
+void TIM1_BRK_TIM9_IRQHandler(void);
+
 #endif
