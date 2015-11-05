@@ -83,7 +83,7 @@ void adc_update()
     //debug_printf("adc_demo\n");
 
     int16_t adc_in[6];
-    int16_t adc_batt = 0;
+    static int16_t adc_batt = 0;
 
     adc_in[0] = slow_adc(AIN0_ADX, AIN0_CHAN);
     adc_in[1] = slow_adc(AIN1_ADX, AIN1_CHAN);
@@ -92,7 +92,7 @@ void adc_update()
     adc_in[4] = slow_adc(AIN4_ADX, AIN4_CHAN);
     adc_in[5] = slow_adc(AIN5_ADX, AIN5_CHAN);
 
-    adc_batt = slow_adc(ADC_BATT_ADX, ADC_BATT_CHAN);
+    adc_batt = (0.95f)*(float)adc_batt + (0.05f)*(float)slow_adc(ADC_BATT_ADX, ADC_BATT_CHAN);
 
     aTxBuffer[REG_RW_ADC_0_H] = (adc_in[0] & 0xFF00) >> 8;
     aTxBuffer[REG_RW_ADC_0_L] = (adc_in[0] & 0x00FF);
