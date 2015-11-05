@@ -35,6 +35,9 @@
 extern volatile uint8_t aTxBuffer[REG_ALL_COUNT]; // =  {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A};  //"SPI Master/Slave : Communication between two SPI using DMA";
 extern __IO uint8_t aRxBuffer [REG_ALL_COUNT];
 
+extern volatile uint8_t adc_dirty;
+extern volatile uint8_t dig_dirty;
+
 extern volatile uint32_t usCount;
 
 

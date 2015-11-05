@@ -26,7 +26,7 @@ int main()
 
     init();
 
-    // set up SPI buffers
+    // set up DMA/SPI buffers
     init_rx_buffer();
     init_tx_buffer();
 
@@ -37,10 +37,10 @@ int main()
         for (i = 0; i < 4; ++i) init_pid_struct(&(pid_structs[i]), i);
     }
 
+    update_dig_pin_configs();
+    config_adc_in_from_regs();
+
     debug_printf("starting\n");
-    
-    update_dig_pin_configs(); // TODO: also in loop, or when reg is updated
-    config_adc_in_from_regs();// TODO: also in loop, or when reg is updated
 
     // Loop until button is pressed
     uint32_t count = 0;
@@ -71,6 +71,19 @@ int main()
             readAccel();
             readMag();
             readGyro();   
+
+            if (adc_dirty)
+            {
+                adc_dirty = 0;
+                config_adc_in_from_regs();
+            }
+
+            if (dig_dirty)
+            {
+                dig_dirty = 0;
+                update_dig_pin_configs();
+            }
+
             uint32_t sensor_update_time = usCount - before;
             const uint16_t us_delay_needed = 700;
             const uint8_t got_time_to_burn = sensor_update_time < us_delay_needed;
@@ -104,11 +117,6 @@ int main()
                 delay_us(222);
             }
         }
-
-        // close program if button is pushed
-        // TODO: remove this developer functionality
-        if (aTxBuffer[REG_RW_DIG_IN_H] & 0b00100000) break; // button
-
     } 
 
     // set all motor pwms to 0
