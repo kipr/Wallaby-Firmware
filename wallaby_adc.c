@@ -82,8 +82,8 @@ void adc_update()
 {
     //debug_printf("adc_demo\n");
 
-    int32_t adc_in[6];
-    int32_t adc_batt = 0;
+    int16_t adc_in[6];
+    int16_t adc_batt = 0;
 
     adc_in[0] = slow_adc(AIN0_ADX, AIN0_CHAN);
     adc_in[1] = slow_adc(AIN1_ADX, AIN1_CHAN);

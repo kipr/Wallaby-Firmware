@@ -10,6 +10,9 @@ __IO uint8_t aRxBuffer [REG_ALL_COUNT];
 // and we would want helper functions that accept  sec/usec timing pairs
 volatile uint32_t usCount;
 
+volatile uint8_t adc_dirty;
+volatile uint8_t dig_dirty;
+
 #ifdef USE_CROSS_STUDIO_DEBUG
     int debug_printf(const char *format, ...){}
     void debug_exit(uint8_t val){}

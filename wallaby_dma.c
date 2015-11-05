@@ -185,13 +185,23 @@ void handle_dma()
             if (aRxBuffer[2] != expected) debug_printf("Missed packet(s) got ID %d expected %d\n", aRxBuffer[2], expected);
 
             // handle recently compled DMA transfer
-            debug_printf("%x %x %x %x %x %x %x %x %x %x\n", aRxBuffer[0], aRxBuffer[1], aRxBuffer[2], aRxBuffer[3], aRxBuffer[4], aRxBuffer[5], aRxBuffer[6], aRxBuffer[7], aRxBuffer[8], aRxBuffer[9]);    
+            //debug_printf("%x %x %x %x %x %x %x %x %x %x\n", aRxBuffer[0], aRxBuffer[1], aRxBuffer[2], aRxBuffer[3], aRxBuffer[4], aRxBuffer[5], aRxBuffer[6], aRxBuffer[7], aRxBuffer[8], aRxBuffer[9]);    
             uint8_t num_regs = aRxBuffer[3];
             uint8_t j;
             for (j = 0; j < num_regs; j+=2)
             {
+                uint8_t address = aRxBuffer[4+j];
+                uint8_t value = aRxBuffer[4+j+1];
                 // TODO: register/value checks before assignment
-                aTxBuffer[aRxBuffer[4+j]] = aRxBuffer[4+j+1];
+                aTxBuffer[address] = value;
+
+                if (address == REG_RW_ADC_PE) adc_dirty = 1;
+
+                if (address >= REG_RW_DIG_PE_H && address <= REG_RW_DIG_OE_L) dig_dirty = 1;
+
+                // TODO: handle motors motors
+
+                // TODO: handle PID coefficients
             }
         }
         else
