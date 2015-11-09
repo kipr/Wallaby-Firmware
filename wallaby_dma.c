@@ -188,7 +188,8 @@ void handle_dma()
             //debug_printf("%x %x %x %x %x %x %x %x %x %x\n", aRxBuffer[0], aRxBuffer[1], aRxBuffer[2], aRxBuffer[3], aRxBuffer[4], aRxBuffer[5], aRxBuffer[6], aRxBuffer[7], aRxBuffer[8], aRxBuffer[9]);    
             uint8_t num_regs = aRxBuffer[3];
             uint8_t j;
-            for (j = 0; j < num_regs; j+=2)
+            uint8_t stop = 2 * num_regs;
+            for (j = 0; j < stop; j+=2)
             {
                 uint8_t address = aRxBuffer[4+j];
                 uint8_t value = aRxBuffer[4+j+1];
