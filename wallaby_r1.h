@@ -13,6 +13,8 @@
 #define MOT_MODE_MRP 3
 
 
+#define GYRO_ID 211
+
 // Yellow LED on pin PE9
 #define LED1_PIN GPIO_Pin_9
 #define LED1_PORT GPIOE

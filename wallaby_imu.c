@@ -193,7 +193,7 @@ void setupGyro()
     regval = SPI3_write(0x00); // write dummy val to get contents
     SPI3_CS1_PORT->BSRRL |= SPI3_CS1; // chip select low
 
-    if (regval == 211){
+    if (regval == GYRO_ID){
       //debug_printf("Gyro identified itself\n");
     }else{
       //debug_printf("Gyro did not respond/identify itself (regval=%d)\n",regval);
