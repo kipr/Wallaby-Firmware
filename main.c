@@ -40,7 +40,7 @@ int main()
     update_dig_pin_configs();
     config_adc_in_from_regs();
 
-    debug_printf("starting\n");
+    //debug_printf("starting\n");
 
     // Loop until button is pressed
     uint32_t count = 0;
@@ -134,5 +134,5 @@ int main()
 
     spi2_dma_cleanup();
 
-    debug_printf("done\n");
+    //debug_printf("done\n");
 }
