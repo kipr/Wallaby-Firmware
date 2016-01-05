@@ -4,7 +4,7 @@
 
 void setup_I2C1(void)
 {
-    debug_printf("Setup I2C1\n");
+    //debug_printf("Setup I2C1\n");
     GPIO_InitTypeDef GPIO_InitStruct;
     I2C_InitTypeDef I2C_InitStruct;
 
@@ -54,17 +54,17 @@ void setup_I2C1(void)
  */
 void I2C_start(I2C_TypeDef* I2Cx, uint8_t address, uint8_t direction){
 	// wait until I2C1 is not busy anymore
-        debug_printf("a\n");
+        //debug_printf("a\n");
 	while(I2C_GetFlagStatus(I2Cx, I2C_FLAG_BUSY));
-          debug_printf("b\n");
+	//debug_printf("b\n");
 
 	// Send I2C1 START condition 
 	I2C_GenerateSTART(I2Cx, ENABLE);
-	          debug_printf("c\n");
+	//debug_printf("c\n");
 
 	// wait for I2C1 EV5 --> Slave has acknowledged start condition
 	while(!I2C_CheckEvent(I2Cx, I2C_EVENT_MASTER_MODE_SELECT));
-		        debug_printf("d\n");
+	//debug_printf("d\n");
 
 	// Send slave Address for write 
 	I2C_Send7bitAddress(I2Cx, address, direction);
@@ -74,22 +74,20 @@ void I2C_start(I2C_TypeDef* I2Cx, uint8_t address, uint8_t direction){
 	 * Master receiver mode, depending on the transmission
 	 * direction
 	 */ 
-        debug_printf("e\n");
+        //debug_printf("e\n");
 
 	if(direction == I2C_Direction_Transmitter){
-                debug_printf("transmitter\n");
+                //debug_printf("transmitter\n");
 		while(!I2C_CheckEvent(I2Cx, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));
 	}
 	else if(direction == I2C_Direction_Receiver){
-                debug_printf("receiver\n");
+                //debug_printf("receiver\n");
 		while(!I2C_CheckEvent(I2Cx, I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED));
 	}
 
         I2C_Cmd(I2Cx, ENABLE);
 
-
-        debug_printf("f\n");
-
+	//debug_printf("f\n");
 }
 
 
@@ -131,7 +129,7 @@ void I2C_stop(I2C_TypeDef* I2Cx){
 
 void i2c1_test(void)
 {
-    debug_printf("i2c1_test\n");
+    //debug_printf("i2c1_test\n");
     const uint8_t SLAVE_ADDRESS = 0xAA; // FIXME:0xA0;
     uint8_t received_data[2];
 
@@ -146,7 +144,7 @@ void i2c1_test(void)
 		I2C_start(I2C1, SLAVE_ADDRESS<<1, I2C_Direction_Receiver); // start a transmission in Master receiver mode
 		//received_data[0] = I2C_read_ack(I2C1); // read one byte and request another byte
 		received_data[1] = I2C_read_nack(I2C1); // read one byte and don't request another byte, stop transmission
-                debug_printf("Read %x, %x\n", received_data[0], received_data[1]);
+                //debug_printf("Read %x, %x\n", received_data[0], received_data[1]);
   }
 }
 

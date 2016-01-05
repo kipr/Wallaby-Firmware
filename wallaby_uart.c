@@ -5,7 +5,7 @@
 // serial communication over external uart header
 void uart2_demo()
 {
-    debug_printf("uart2 demo\n");
+    //debug_printf("uart2 demo\n");
     // Wait until a byte is received 
     //while(USART_GetFlagStatus(USART2, USART_FLAG_RXNE) == RESET)
     //{
@@ -14,13 +14,13 @@ void uart2_demo()
     if (USART_GetFlagStatus(USART2, USART_FLAG_RXNE) != RESET)
     {
         unsigned char rd = USART_ReceiveData(USART2);
-        debug_printf("got %c\n", rd);
+        //debug_printf("got %c\n", rd);
     }
 
     // read byte and print via usart2
     //unsigned char rd = USART_ReceiveData(USART2);
     //debug_printf("got %c\n", rd);
-    debug_printf("sending\n");
+    //debug_printf("sending\n");
     USART_SendData(USART2, 'D');        
 }
 
@@ -28,7 +28,7 @@ void uart2_demo()
 // serial communication with main processor
 void uart3_demo()
 {
-    debug_printf("uart3 demo\n");
+    //debug_printf("uart3 demo\n");
     // Wait until a byte is received 
     while(USART_GetFlagStatus(USART3, USART_FLAG_RXNE) == RESET)
     {
@@ -36,7 +36,7 @@ void uart3_demo()
 
     // read byte and print via usart2
     unsigned char rd = USART_ReceiveData(USART3);
-    debug_printf("got %c\n", rd);
+    //debug_printf("got %c\n", rd);
     USART_SendData(USART3, 'D');        
 }
 

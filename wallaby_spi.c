@@ -179,7 +179,7 @@ void spi4_demo()
     // request "Who am I)
     SPI4_write(0x1F); // write register
     regval = SPI4_write(0x00); // write dummy val to get contents
-    debug_printf("Read a %x\n", regval);
+    //debug_printf("Read a %x\n", regval);
 
     SPI4_CS0_PORT->BSRRL |= SPI4_CS0; // chip select high
 }

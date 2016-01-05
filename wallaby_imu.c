@@ -18,9 +18,9 @@ void setupAccelMag()
     SPI3_CS0_PORT->BSRRL |= SPI3_CS0; // chip select low
 
     if (regval == 73){
-        debug_printf("Accel/Magn identified itself\n");
+        //debug_printf("Accel/Magn identified itself\n");
     }else{
-        debug_printf("Accel/Magn did not respond/identify itself (regval=%d)\n",regval);
+        //debug_printf("Accel/Magn did not respond/identify itself (regval=%d)\n",regval);
         return;
     }
 
@@ -193,10 +193,10 @@ void setupGyro()
     regval = SPI3_write(0x00); // write dummy val to get contents
     SPI3_CS1_PORT->BSRRL |= SPI3_CS1; // chip select low
 
-    if (regval == 211){
-      debug_printf("Gyro identified itself\n");
+    if (regval == GYRO_ID){
+      //debug_printf("Gyro identified itself\n");
     }else{
-      debug_printf("Gyro did not respond/identify itself (regval=%d)\n",regval);
+      //debug_printf("Gyro did not respond/identify itself (regval=%d)\n",regval);
       return;
     }
 

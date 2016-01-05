@@ -106,7 +106,7 @@ void init()
     // Enable SPI DMA RX Requsts 
     SPI_I2S_DMACmd(SPI2, SPI_I2S_DMAReq_Rx, ENABLE);
 
-    debug_printf("enable spi\n");
+    //debug_printf("enable spi\n");
     // Enable the SPI peripheral
     SPI_Cmd(SPI2, ENABLE);
 
