@@ -21,39 +21,39 @@
 
 
 // Motor0 0A7 (U5)   PWMA=PWM1, AIN2=PD7, AIN1=PD1
-#define MOT0_PWM GPIO_Pin_8 //PA8
-#define MOT0_PWM_PinSource GPIO_PinSource8
-#define MOT0_PWM_PORT GPIOA
-#define MOT0_DIR1 GPIO_Pin_1
-#define MOT0_DIR1_PORT GPIOD
-#define MOT0_DIR2 GPIO_Pin_7
-#define MOT0_DIR2_PORT GPIOD
-#define MOT0_BEMF_H GPIO_Pin_0  //ADC123_IN0  PA0
-#define MOT0_BEMF_L GPIO_Pin_1  //ADC123_IN1  PA1
-#define MOT0_BEMF_H_CHAN ADC_Channel_0
-#define MOT0_BEMF_L_CHAN ADC_Channel_1
-#define MOT0_BEMF_H_ADX ADC3
-#define MOT0_BEMF_L_ADX ADC3
-#define MOT0_BEMF_H_PORT GPIOA
-#define MOT0_BEMF_L_PORT GPIOA
-
-
-// Motor1 1A7 (U5)   PWMB=PWM2  BIN2=PC13, BIN1=PE15
-#define MOT1_PWM GPIO_Pin_9 //PA9
-#define MOT1_PWM_PinSource GPIO_PinSource9
+#define MOT1_PWM GPIO_Pin_8 //PA8
+#define MOT1_PWM_PinSource GPIO_PinSource8
 #define MOT1_PWM_PORT GPIOA
-#define MOT1_DIR1 GPIO_Pin_15
-#define MOT1_DIR1_PORT GPIOE
-#define MOT1_DIR2 GPIO_Pin_13
-#define MOT1_DIR2_PORT GPIOC
-#define MOT1_BEMF_H GPIO_Pin_2  //ADC123_IN2  PA2
-#define MOT1_BEMF_L GPIO_Pin_3  //ADC123_IN3  PA3
-#define MOT1_BEMF_H_CHAN ADC_Channel_2
-#define MOT1_BEMF_L_CHAN ADC_Channel_3
+#define MOT1_DIR1 GPIO_Pin_1
+#define MOT1_DIR1_PORT GPIOD
+#define MOT1_DIR2 GPIO_Pin_7
+#define MOT1_DIR2_PORT GPIOD
+#define MOT1_BEMF_H GPIO_Pin_0  //ADC123_IN0  PA0
+#define MOT1_BEMF_L GPIO_Pin_1  //ADC123_IN1  PA1
+#define MOT1_BEMF_H_CHAN ADC_Channel_0
+#define MOT1_BEMF_L_CHAN ADC_Channel_1
 #define MOT1_BEMF_H_ADX ADC3
 #define MOT1_BEMF_L_ADX ADC3
 #define MOT1_BEMF_H_PORT GPIOA
 #define MOT1_BEMF_L_PORT GPIOA
+
+
+// Motor1 1A7 (U5)   PWMB=PWM2  BIN2=PC13, BIN1=PE15
+#define MOT0_PWM GPIO_Pin_9 //PA9
+#define MOT0_PWM_PinSource GPIO_PinSource9
+#define MOT0_PWM_PORT GPIOA
+#define MOT0_DIR1 GPIO_Pin_15
+#define MOT0_DIR1_PORT GPIOE
+#define MOT0_DIR2 GPIO_Pin_13
+#define MOT0_DIR2_PORT GPIOC
+#define MOT0_BEMF_H GPIO_Pin_2  //ADC123_IN2  PA2
+#define MOT0_BEMF_L GPIO_Pin_3  //ADC123_IN3  PA3
+#define MOT0_BEMF_H_CHAN ADC_Channel_2
+#define MOT0_BEMF_L_CHAN ADC_Channel_3
+#define MOT0_BEMF_H_ADX ADC3
+#define MOT0_BEMF_L_ADX ADC3
+#define MOT0_BEMF_H_PORT GPIOA
+#define MOT0_BEMF_L_PORT GPIOA
 
 
 // Motor2  0A37 (U5)   PWMA=PWM3, AIN2=PC15, AIN1=PC14
@@ -92,22 +92,26 @@
 #define MOT3_BEMF_L_PORT GPIOA
 
 
+#define SRV_DISABLE GPIO_Pin_10 // PE10
+#define SRV_DISABLE_PORT GPIOE
+#define SRV_DISABLE_PinSource GPIO_PinSource10
+
 // servos from J3
-#define SRV0_PWM GPIO_Pin_7 // PWM5 PC7 -->  U22
-#define SRV0_PWM_PORT GPIOC
-#define SRV0_PWM_PinSource GPIO_PinSource7
-#define SRV1_PWM GPIO_Pin_8 // PWM6 PC8 -->  U22
+#define SRV1_PWM GPIO_Pin_7 // PWM5 PC7 -->  U22
 #define SRV1_PWM_PORT GPIOC
-#define SRV1_PWM_PinSource GPIO_PinSource8
+#define SRV1_PWM_PinSource GPIO_PinSource7
+#define SRV0_PWM GPIO_Pin_8 // PWM6 PC8 -->  U22
+#define SRV0_PWM_PORT GPIOC
+#define SRV0_PWM_PinSource GPIO_PinSource8
 
 
 // servos from J17
-#define SRV2_PWM GPIO_Pin_5 // PWM7  PE5 -->  U2
-#define SRV2_PWM_PORT GPIOE
-#define SRV2_PWM_PinSource GPIO_PinSource5
-#define SRV3_PWM GPIO_Pin_6 // PWM8  PE6 --> U2
+#define SRV3_PWM GPIO_Pin_5 // PWM7  PE5 -->  U2
 #define SRV3_PWM_PORT GPIOE
-#define SRV3_PWM_PinSource GPIO_PinSource6
+#define SRV3_PWM_PinSource GPIO_PinSource5
+#define SRV2_PWM GPIO_Pin_6 // PWM8  PE6 --> U2
+#define SRV2_PWM_PORT GPIOE
+#define SRV2_PWM_PinSource GPIO_PinSource6
 
 
 // Analog In
@@ -162,6 +166,9 @@
 #define DIG11_PIN GPIO_Pin_9 // PD9 main proc
 #define DIG12_PIN GPIO_Pin_9  // PE9 LED
 #define DIG13_PIN GPIO_Pin_0 // PB0 button
+#define DIG14_PIN GPIO_Pin_4 //PB4 -> GPIO 114
+#define DIG15_PIN GPIO_Pin_5 //PB5 -> GPIO 117
+
 
 #define DIG0_PORT GPIOD
 #define DIG1_PORT GPIOD
@@ -177,7 +184,8 @@
 #define DIG11_PORT GPIOD // main proc
 #define DIG12_PORT GPIOE // LED
 #define DIG13_PORT GPIOB // button
-
+#define DIG14_PORT GPIOB // main proc
+#define DIG15_PORT GPIOB // main proc
 
 
 // SPI2  (Main Proc)

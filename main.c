@@ -26,14 +26,14 @@ int main()
 
     init();
 
+
     // set up DMA/SPI buffers
     init_rx_buffer();
     init_tx_buffer();
 
     // set up pid structs
     pid_struct pid_structs[4];
-    {
-        uint8_t i;
+    {        uint8_t i;
         for (i = 0; i < 4; ++i) init_pid_struct(&(pid_structs[i]), i);
     }
 

@@ -97,8 +97,8 @@ void TIM3_IRQHandler(void)
         uint32_t servo0_cmd = (((uint32_t)aTxBuffer[REG_RW_SERVO_0_H]) << 8) | ((uint32_t)aTxBuffer[REG_RW_SERVO_0_L]);
         uint32_t servo1_cmd = (((uint32_t)aTxBuffer[REG_RW_SERVO_1_H]) << 8) | ((uint32_t)aTxBuffer[REG_RW_SERVO_1_L]);
 
-        TIM_SetCompare2(TIM3, servo0_cmd);
-        TIM_SetCompare3(TIM3, servo1_cmd);
+        TIM_SetCompare2(TIM3, servo1_cmd);
+        TIM_SetCompare3(TIM3, servo0_cmd);
     }
 }
 
@@ -112,7 +112,7 @@ void TIM1_BRK_TIM9_IRQHandler(void)
         uint32_t servo2_cmd = (((uint32_t)aTxBuffer[REG_RW_SERVO_2_H]) << 8) | ((uint32_t)aTxBuffer[REG_RW_SERVO_2_L]);
         uint32_t servo3_cmd = (((uint32_t)aTxBuffer[REG_RW_SERVO_3_H]) << 8) | ((uint32_t)aTxBuffer[REG_RW_SERVO_3_L]);
 
-        TIM_SetCompare1(TIM9, servo2_cmd);
-        TIM_SetCompare2(TIM9, servo3_cmd);
+        TIM_SetCompare1(TIM9, servo3_cmd);
+        TIM_SetCompare2(TIM9, servo2_cmd);
     }
 }

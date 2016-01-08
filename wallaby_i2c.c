@@ -15,7 +15,7 @@ void setup_I2C1(void)
     GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF;// GPIO_Mode_AF;
     GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;//GPIO_OType_OD;
-    GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_UP;
+    GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
 
     GPIO_PinAFConfig(I2C1_SDA_PORT, I2C1_SDA_SOURCE, GPIO_AF_I2C1);	
     GPIO_PinAFConfig(I2C1_SCL_PORT, I2C1_SCL_SOURCE, GPIO_AF_I2C1);
@@ -129,8 +129,8 @@ void I2C_stop(I2C_TypeDef* I2Cx){
 
 void i2c1_test(void)
 {
-    //debug_printf("i2c1_test\n");
-    const uint8_t SLAVE_ADDRESS = 0xAA; // FIXME:0xA0;
+    debug_printf("i2c1_test\n");
+    const uint8_t SLAVE_ADDRESS = 0xA0; // FIXME:0xA0;
     uint8_t received_data[2];
 
    while(1)
@@ -142,9 +142,9 @@ void i2c1_test(void)
 		I2C_stop(I2C1); // stop the transmission
 		
 		I2C_start(I2C1, SLAVE_ADDRESS<<1, I2C_Direction_Receiver); // start a transmission in Master receiver mode
-		//received_data[0] = I2C_read_ack(I2C1); // read one byte and request another byte
+		received_data[0] = I2C_read_ack(I2C1); // read one byte and request another byte
 		received_data[1] = I2C_read_nack(I2C1); // read one byte and don't request another byte, stop transmission
-                //debug_printf("Read %x, %x\n", received_data[0], received_data[1]);
+                debug_printf("Read %x, %x\n", received_data[0], received_data[1]);
   }
 }
 

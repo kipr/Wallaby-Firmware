@@ -32,4 +32,8 @@ void update_bemfs(int32_t * bemf_vals)
     bemf_vals[1] = adc_motor_vals[2] - adc_motor_vals[3];
     bemf_vals[2] = adc_motor_vals[4] - adc_motor_vals[5];
     bemf_vals[3] = adc_motor_vals[6] - adc_motor_vals[7];
+
+    //static int i = 0;
+    //i += 1;
+    //if (i % 200 == 0) debug_printf("%d   %d   %d   %d\n", bemf_vals[0], bemf_vals[1], bemf_vals[2], bemf_vals[3]);
 }

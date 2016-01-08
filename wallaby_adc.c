@@ -9,14 +9,14 @@ void configAnalogInPin(uint32_t pin, GPIO_TypeDef* port, uint8_t pullup_enable)
     GPIO_InitStructure.GPIO_Pin = pin;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;
     
-    if (pullup_enable)
-    {
-        GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
-    }
-    else
-    {
+    //if (pullup_enable)
+    //{
+    //    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
+    //}
+    //else
+    //{
         GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
-    }
+    //}
 
     GPIO_Init(port, &GPIO_InitStructure);
 }
@@ -82,15 +82,19 @@ void adc_update()
 {
     //debug_printf("adc_demo\n");
 
-    int16_t adc_in[6];
+    static int16_t adc_in[6];
     static int16_t adc_batt = 0;
 
-    adc_in[0] = slow_adc(AIN0_ADX, AIN0_CHAN);
-    adc_in[1] = slow_adc(AIN1_ADX, AIN1_CHAN);
-    adc_in[2] = slow_adc(AIN2_ADX, AIN2_CHAN);
-    adc_in[3] = slow_adc(AIN3_ADX, AIN3_CHAN);
-    adc_in[4] = slow_adc(AIN4_ADX, AIN4_CHAN);
-    adc_in[5] = slow_adc(AIN5_ADX, AIN5_CHAN);
+    adc_in[0] = (0.9f)*(float)adc_in[0] + (0.1f)*(float)(slow_adc(AIN0_ADX, AIN0_CHAN));
+    adc_in[1] = (0.9f)*(float)adc_in[1] + (0.1f)*(float)(slow_adc(AIN1_ADX, AIN1_CHAN));
+    adc_in[2] = (0.9f)*(float)adc_in[2] + (0.1f)*(float)(slow_adc(AIN2_ADX, AIN2_CHAN));
+    adc_in[3] = (0.9f)*(float)adc_in[3] + (0.1f)*(float)(slow_adc(AIN3_ADX, AIN3_CHAN));
+    adc_in[4] = (0.9f)*(float)adc_in[4] + (0.1f)*(float)(slow_adc(AIN4_ADX, AIN4_CHAN));
+    adc_in[5] = (0.9f)*(float)adc_in[5] + (0.1f)*(float)(slow_adc(AIN5_ADX, AIN5_CHAN));
+
+    //static int i = 0;
+    //i+=1;
+    //if (i % 100 == 0) debug_printf("%d   %d   %d\n", adc_in[0], adc_in[2], adc_in[5]);
 
     adc_batt = (0.95f)*(float)adc_batt + (0.05f)*(float)slow_adc(ADC_BATT_ADX, ADC_BATT_CHAN);
 

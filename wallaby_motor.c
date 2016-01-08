@@ -296,8 +296,8 @@ void TIM1_CC_IRQHandler(void)
         uint32_t mot1_cmd = (((uint32_t)aTxBuffer[REG_RW_MOT_1_PWM_H]) << 8) | ((uint32_t)aTxBuffer[REG_RW_MOT_1_PWM_L]);
         uint32_t mot2_cmd = (((uint32_t)aTxBuffer[REG_RW_MOT_2_PWM_H]) << 8) | ((uint32_t)aTxBuffer[REG_RW_MOT_2_PWM_L]);
         
-        TIM_SetCompare1(TIM1, mot0_cmd);
-        TIM_SetCompare2(TIM1, mot1_cmd);      
+        TIM_SetCompare1(TIM1, mot1_cmd);
+        TIM_SetCompare2(TIM1, mot0_cmd);      
         TIM_SetCompare3(TIM1, mot2_cmd);
     }
 }

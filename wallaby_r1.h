@@ -8,8 +8,8 @@
 
 
 #define MOT_MODE_PWM 0
-#define MOT_MODE_MTP 1
-#define MOT_MODE_MAV 2
+#define MOT_MODE_MAV 1
+#define MOT_MODE_MTP 2
 #define MOT_MODE_MRP 3
 
 
