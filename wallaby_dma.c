@@ -156,6 +156,8 @@ void init_tx_buffer()
     clear_tx_buffer();
     
     aTxBuffer[REG_R_START] = 'J';
+    aTxBuffer[REG_R_VERSION_H] = (((uint16_t)WALLABY_FIRMWARE_VERSION_R) & 0xFF00) >> 8;
+    aTxBuffer[REG_R_VERSION_L] = (((uint16_t)WALLABY_FIRMWARE_VERSION_R) & 0x00FF);
 
     const uint16_t init_servo_cmd = 1500;
     aTxBuffer[REG_RW_SERVO_0_H] = (init_servo_cmd & 0xFF00) >> 8; 
@@ -194,15 +196,24 @@ void handle_dma()
                 uint8_t address = aRxBuffer[4+j];
                 uint8_t value = aRxBuffer[4+j+1];
                 // TODO: register/value checks before assignment
-                aTxBuffer[address] = value;
 
                 if (address == REG_RW_ADC_PE) adc_dirty = 1;
 
                 if (address >= REG_RW_DIG_PE_H && address <= REG_RW_DIG_OE_L) dig_dirty = 1;
 
-                // TODO: handle motors motors
+                // handle motors modes clearing done bits
+                // TODO: cleanup
+                if (address == REG_RW_MOT_MODES)
+                {
+                    if ((value && 0b00000011) !=  (aTxBuffer[REG_RW_MOT_MODES] && 0b00000011)) aTxBuffer[REG_RW_MOT_DONE] &= ~1;
+                    if ((value && 0b00001100) !=  (aTxBuffer[REG_RW_MOT_MODES] && 0b00001100)) aTxBuffer[REG_RW_MOT_DONE] &= ~2;
+                    if ((value && 0b00110000) !=  (aTxBuffer[REG_RW_MOT_MODES] && 0b00110000)) aTxBuffer[REG_RW_MOT_DONE] &= ~4;
+                    if ((value && 0b11000000) !=  (aTxBuffer[REG_RW_MOT_MODES] && 0b11000000)) aTxBuffer[REG_RW_MOT_DONE] &= ~8;
+                }
 
                 // TODO: handle PID coefficients
+
+                aTxBuffer[address] = value;
             }
         }
         else
