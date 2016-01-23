@@ -128,7 +128,8 @@ void spi2_dma_cleanup()
 
 void clear_rx_buffer()
 {
-    for(uint16_t i=0;i<BUFFERSIZE;i++)
+    uint16_t i=0;
+    for(i=0;i<BUFFERSIZE;i++)
     {
         aRxBuffer[i]=0x00;
     }
@@ -137,7 +138,8 @@ void clear_rx_buffer()
 
 void clear_tx_buffer()
 {
-    for(uint16_t i=0;i<BUFFERSIZE;i++)
+    uint16_t i=0;
+    for(i=0;i<BUFFERSIZE;i++)
     {
         aTxBuffer[i]=0x00;
     }
