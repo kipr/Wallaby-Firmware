@@ -17,12 +17,6 @@ CMAKE_FORCE_CXX_COMPILER(arm-none-eabi-g++ GNU)
 # see https://github.com/swift-nav/libswiftnav/blob/master/cmake/Toolchain-gcc-arm-embedded.cmake
 # for how to find and set CMAKE_INSTALL_PREFIX and CMAKE_FIND_ROOT_PATH
 
-#set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -march=armv7e-m")
-#set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mcpu=cortex-m4")
-#set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mfloat-abi=hard")
-##set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mthumb")
-##set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mfpu=fpv4-sp-d16")
-
 # TODO set CXX and all the other flags. see
 # http://stackoverflow.com/questions/16588097/cmake-separate-linker-and-compiler-flags
 
