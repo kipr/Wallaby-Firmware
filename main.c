@@ -41,6 +41,7 @@ int main()
     config_adc_in_from_regs();
 
     //debug_printf("starting\n");
+    int low_volt_alarmed = 0;
 
     // Loop until button is pressed
     uint32_t count = 0;
@@ -67,10 +68,31 @@ int main()
             // now I squeeze in most sensor updates instead of just sleeping
             uint32_t before = usCount;
             update_dig_pins();
-            adc_update();
+            int16_t batt = adc_update();
             readAccel();
             readMag();
             readGyro();   
+
+            if (batt < 636) // about 5.75 volts
+            {
+                configDigitalOutPin(LED1_PIN, LED1_PORT);
+                low_volt_alarmed = 1;
+                if (count % 50 < 10) // low duty cycle to save battery
+                {
+                    LED1_PORT->BSRRL |= LED1_PIN; // ON
+                }
+                else
+                {
+                    LED1_PORT->BSRRH |= LED1_PIN; // OFF
+                }
+            }
+            else if (low_volt_alarmed)
+            {
+                // make sure led is off coming out of the low voltage alarm
+                configDigitalOutPin(LED1_PIN, LED1_PORT);
+                LED1_PORT->BSRRH |= LED1_PIN; // OFF
+                low_volt_alarmed = 0;
+            }
 
             if (adc_dirty)
             {

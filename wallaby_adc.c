@@ -78,12 +78,12 @@ uint16_t slow_adc(ADC_TypeDef * bus, uint8_t channel)
 
 
 
-void adc_update()
+int16_t adc_update()
 {
     //debug_printf("adc_demo\n");
 
     static int16_t adc_in[6];
-    static int16_t adc_batt = 0;
+    static int32_t adc_batt = 800; // TODO: int16_t when I can find out how to force a 4-byte aligned output binary
 
     adc_in[0] = (0.9f)*(float)adc_in[0] + (0.1f)*(float)(slow_adc(AIN0_ADX, AIN0_CHAN));
     adc_in[1] = (0.9f)*(float)adc_in[1] + (0.1f)*(float)(slow_adc(AIN1_ADX, AIN1_CHAN));
@@ -113,6 +113,8 @@ void adc_update()
 
     aTxBuffer[REG_RW_BATT_H] = (adc_batt & 0xFF00) >> 8;
     aTxBuffer[REG_RW_BATT_L] = (adc_batt & 0x00FF);
+
+    return adc_batt;
 }
 
 

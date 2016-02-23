@@ -6,4 +6,4 @@ void config_adc_in_from_regs();
 
 uint16_t slow_adc(ADC_TypeDef * bus, uint8_t channel);
 
-void adc_update();
+int16_t adc_update();
