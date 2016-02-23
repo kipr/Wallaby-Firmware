@@ -168,6 +168,7 @@ void init_tx_buffer()
     aTxBuffer[REG_RW_SERVO_2_L] = (init_servo_cmd & 0x00FF); 
     aTxBuffer[REG_RW_SERVO_3_H] = (init_servo_cmd & 0xFF00) >> 8; 
     aTxBuffer[REG_RW_SERVO_3_L] = (init_servo_cmd & 0x00FF); 
+    aTxBuffer[REG_RW_MOT_SRV_ALLSTOP] = 0b11110000;
 
     uint8_t i;
     for (i = 0; i < 4; ++i) set_pid_reg_defaults(i);
@@ -187,19 +188,19 @@ void handle_dma()
             //if (aRxBuffer[2] != expected) debug_printf("Missed packet(s) got ID %d expected %d\n", aRxBuffer[2], expected);
 
             // handle recently compled DMA transfer
-            //debug_printf("%x %x %x %x %x %x %x %x %x %x\n", aRxBuffer[0], aRxBuffer[1], aRxBuffer[2], aRxBuffer[3], aRxBuffer[4], aRxBuffer[5], aRxBuffer[6], aRxBuffer[7], aRxBuffer[8], aRxBuffer[9]);    
             uint8_t num_regs = aRxBuffer[3];
             uint8_t j;
+            if (num_regs != 0)
+            {
+                //debug_printf("got good packet with %d\n", num_regs);
+                //debug_printf("%x %x %x %x %x %x %x %x %x %x\n", aRxBuffer[0], aRxBuffer[1], aRxBuffer[2], aRxBuffer[3], aRxBuffer[4], aRxBuffer[5], aRxBuffer[6], aRxBuffer[7], aRxBuffer[8], aRxBuffer[9]);    
+    
+            }
             uint8_t stop = 2 * num_regs;
             for (j = 0; j < stop; j+=2)
             {
                 uint8_t address = aRxBuffer[4+j];
                 uint8_t value = aRxBuffer[4+j+1];
-                // TODO: register/value checks before assignment
-
-                if (address == REG_RW_ADC_PE) adc_dirty = 1;
-
-                if (address >= REG_RW_DIG_PE_H && address <= REG_RW_DIG_OE_L) dig_dirty = 1;
 
                 // handle motors modes clearing done bits
                 // TODO: cleanup
@@ -211,14 +212,20 @@ void handle_dma()
                     if ((value && 0b11000000) !=  (aTxBuffer[REG_RW_MOT_MODES] && 0b11000000)) aTxBuffer[REG_RW_MOT_DONE] &= ~8;
                 }
 
-                // TODO: handle PID coefficients
-
                 aTxBuffer[address] = value;
+                
+                // TODO: register/value checks before assignment
+
+                if (address == REG_RW_ADC_PE) adc_dirty = 1;
+
+                if (address >= REG_RW_DIG_PE_H && address <= REG_RW_DIG_OE_L) dig_dirty = 1;
+
+                // TODO: handle PID coefficients
             }
         }
         else
         {
-            //debug_printf("got bad spi packet\n");
+            //debug_printf("got bad spi packet with start %d version %d tot %d\n", aRxBuffer[0], aRxBuffer[1], aRxBuffer[REG_READABLE_COUNT-1]);
             if (aRxBuffer[1] == WALLABY_SPI_VERSION)
             {
                 //debug_printf("SPI protocol version mismatch\n");
