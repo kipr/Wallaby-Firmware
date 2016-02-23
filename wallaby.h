@@ -30,7 +30,7 @@
 #ifndef WALLABY_H_
 #define WALLABY_H_
 
-#define WALLABY_FIRMWARE_VERSION_R  2
+#define WALLABY_FIRMWARE_VERSION_R  5
 
 #define BUFFERSIZE                       REG_READABLE_COUNT
 

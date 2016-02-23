@@ -115,7 +115,10 @@ void TIM1_BRK_TIM9_IRQHandler(void)
         uint32_t servo2_cmd = (((uint32_t)aTxBuffer[REG_RW_SERVO_2_H]) << 8) | ((uint32_t)aTxBuffer[REG_RW_SERVO_2_L]);
         uint32_t servo3_cmd = (((uint32_t)aTxBuffer[REG_RW_SERVO_3_H]) << 8) | ((uint32_t)aTxBuffer[REG_RW_SERVO_3_L]);
 
-        if (aTxBuffer[REG_RW_MOT_SRV_ALLSTOP] & 0b01000000) servo2_cmd = 0;
+        if (aTxBuffer[REG_RW_MOT_SRV_ALLSTOP] & 0b01000000)
+        {
+            servo2_cmd = 0;
+        }
         if (aTxBuffer[REG_RW_MOT_SRV_ALLSTOP] & 0b10000000) servo3_cmd = 0;
 
         TIM_SetCompare1(TIM9, servo3_cmd);
