@@ -22,7 +22,8 @@
 
 int main()
 {
-    int32_t bemf_vals[4];
+    int32_t bemf_vals[4] = {0,0,0,0};
+    int32_t bemf_vals_filt[4] = {0,0,0,0};
 
     init();
 
@@ -32,8 +33,7 @@ int main()
 
     // set up pid structs
     pid_struct pid_structs[4];
-    {
-        uint8_t i;
+    {        uint8_t i;
         for (i = 0; i < 4; ++i) init_pid_struct(&(pid_structs[i]), i);
     }
 
@@ -96,7 +96,7 @@ int main()
 
             if (bemf_update_time)
             {
-                update_bemfs(bemf_vals);
+                update_bemfs(bemf_vals, bemf_vals_filt);
 
                 // set the motor directions back up
                 update_motor_modes();
@@ -106,7 +106,7 @@ int main()
                 {
                     uint8_t shift = 2*channel;
                     uint8_t motor_mode = (aTxBuffer[REG_RW_MOT_MODES] & (0b11 << shift)) >> shift;
-                    motor_update(bemf_vals[channel], &pid_structs[channel], channel, motor_mode);
+                    motor_update(bemf_vals[channel], bemf_vals_filt[channel], &pid_structs[channel], channel, motor_mode);
                 }
 
             }

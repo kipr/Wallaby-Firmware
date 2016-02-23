@@ -71,6 +71,8 @@ void update_dig_pin_configs()
     update_dig_pin_from_reg(DIG11_PIN, DIG11_PORT, aTxBuffer[REG_RW_DIG_OE_H] & 8, aTxBuffer[REG_RW_DIG_PE_H] & 8);
     update_dig_pin_from_reg(DIG12_PIN, DIG12_PORT, aTxBuffer[REG_RW_DIG_OE_H] & 16, aTxBuffer[REG_RW_DIG_PE_H] & 16);
     update_dig_pin_from_reg(DIG13_PIN, DIG13_PORT, aTxBuffer[REG_RW_DIG_OE_H] & 32, aTxBuffer[REG_RW_DIG_PE_H] & 32);
+    update_dig_pin_from_reg(DIG14_PIN, DIG14_PORT, aTxBuffer[REG_RW_DIG_OE_H] & 64, aTxBuffer[REG_RW_DIG_PE_H] & 64);
+    update_dig_pin_from_reg(DIG15_PIN, DIG15_PORT, aTxBuffer[REG_RW_DIG_OE_H] & 128, aTxBuffer[REG_RW_DIG_PE_H] & 128);
 }
 
 void update_dig_pin(uint32_t pin, GPIO_TypeDef* port, uint8_t output_enable, uint8_t out_val, uint8_t pin_num)
@@ -135,5 +137,7 @@ void update_dig_pins()
     update_dig_pin(DIG11_PIN, DIG11_PORT, aTxBuffer[REG_RW_DIG_OE_H] & 8, aTxBuffer[REG_RW_DIG_OUT_H] & 8, 11);
     update_dig_pin(DIG12_PIN, DIG12_PORT, aTxBuffer[REG_RW_DIG_OE_H] & 16, aTxBuffer[REG_RW_DIG_OUT_H] & 16, 12);
     update_dig_pin(DIG13_PIN, DIG13_PORT, aTxBuffer[REG_RW_DIG_OE_H] & 32, aTxBuffer[REG_RW_DIG_OUT_H] & 32, 13);
+    update_dig_pin(DIG14_PIN, DIG14_PORT, aTxBuffer[REG_RW_DIG_OE_H] & 64, aTxBuffer[REG_RW_DIG_OUT_H] & 64, 14);
+    update_dig_pin(DIG15_PIN, DIG15_PORT, aTxBuffer[REG_RW_DIG_OE_H] & 128, aTxBuffer[REG_RW_DIG_OUT_H] & 128, 15);
 }
 

@@ -5,16 +5,16 @@
 // serial communication over external uart header
 void uart2_demo()
 {
-    //debug_printf("uart2 demo\n");
+    debug_printf("uart2 demo\n");
     // Wait until a byte is received 
-    //while(USART_GetFlagStatus(USART2, USART_FLAG_RXNE) == RESET)
-    //{
-    //}
+    while(USART_GetFlagStatus(USART2, USART_FLAG_RXNE) == RESET)
+    {
+    }
 
     if (USART_GetFlagStatus(USART2, USART_FLAG_RXNE) != RESET)
     {
         unsigned char rd = USART_ReceiveData(USART2);
-        //debug_printf("got %c\n", rd);
+        debug_printf("got %c\n", rd);
     }
 
     // read byte and print via usart2
@@ -22,6 +22,7 @@ void uart2_demo()
     //debug_printf("got %c\n", rd);
     //debug_printf("sending\n");
     USART_SendData(USART2, 'D');        
+    debug_printf("done with uart2 demo\n");
 }
 
 

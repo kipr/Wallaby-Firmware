@@ -64,7 +64,7 @@ void idle_motor_dirs()
 
 
 
-void motor_update(int16_t bemf_val, pid_struct * pids, uint8_t channel, uint8_t motor_mode)
+void motor_update(int16_t bemf_val, int16_t bemf_val_filt, pid_struct * pids, uint8_t channel, uint8_t motor_mode)
 {
     static const uint8_t MOT_SP_REG_STRIDE = 2;
     static const uint8_t MOT_PWM_REG_STRIDE = 2;
@@ -75,14 +75,52 @@ void motor_update(int16_t bemf_val, pid_struct * pids, uint8_t channel, uint8_t 
 
     const uint16_t mot_pos_address = REG_RW_MOT_0_B3 + MOT_POS_REG_STRIDE * channel;
     int32_t pos = ((int32_t)aTxBuffer[mot_pos_address] << 24) | ((int32_t)aTxBuffer[mot_pos_address+1] << 16) | ((int32_t)aTxBuffer[mot_pos_address+2] << 8) | ((int32_t)aTxBuffer[mot_pos_address+3]);
-    pos += bemf_val;
+    pos += bemf_val_filt;
     aTxBuffer[mot_pos_address]   = (pos & 0xFF000000) >> 24;
     aTxBuffer[mot_pos_address+1] = (pos & 0x00FF0000) >> 16;
     aTxBuffer[mot_pos_address+2] = (pos & 0x0000FF00) >> 8;
     aTxBuffer[mot_pos_address+3] = (pos & 0x000000FF);
 
+        // TODO: more concise way of this?
+        // something like   ~(0b11 << (6- 2*channel))
+        uint8_t dir_mask = 0xff;
+        switch(channel)
+        {
+            case 0:
+                dir_mask = 0b11111100;
+                break;
+            case 1:
+                dir_mask = 0b11110011;
+                break;
+            case 2:
+                dir_mask = 0b11001111;
+                break;
+            case 3:
+                dir_mask = 0b00111111;
+                break;
+            default:
+                break;
+        }
 
-    uint8_t motor_done = aRxBuffer[REG_RW_MOT_DONE] & (1 << channel);
+
+    uint8_t motor_done = aTxBuffer[REG_RW_MOT_DONE] & (1 << channel);
+    uint8_t motor_stop = aTxBuffer[REG_RW_MOT_SRV_ALLSTOP] & (1 << channel);
+
+    // TODO: maybe move this logic so it integrates with code below better
+    if (motor_stop)
+    {
+        uint16_t ucmd = 0;
+
+        // passive braking
+        aTxBuffer[REG_RW_MOT_DIRS] = (aTxBuffer[REG_RW_MOT_DIRS] & dir_mask) | (0b00 << (2*channel));
+
+        // TODO multi channel is a little messy here
+        aTxBuffer[REG_RW_MOT_0_PWM_H + MOT_PWM_REG_STRIDE * channel] = (ucmd & 0xFF00) >> 8;
+        aTxBuffer[REG_RW_MOT_0_PWM_L + MOT_PWM_REG_STRIDE * channel] = (ucmd & 0x00FF);
+
+        update_motor_modes();
+        return;
+    }
 
     if (motor_mode == 0)
     {
@@ -125,14 +163,14 @@ void motor_update(int16_t bemf_val, pid_struct * pids, uint8_t channel, uint8_t 
             {
                 if(pos < pos_goal){
                     cmd = 0;
-                    aRxBuffer[REG_RW_MOT_DONE] |= (1 << channel);
+                    aTxBuffer[REG_RW_MOT_DONE] |= (1 << channel);
                 }
             }
             else
             {
                 if(pos > pos_goal){
                     cmd = 0;
-                    aRxBuffer[REG_RW_MOT_DONE] |= (1 << channel);
+                    aTxBuffer[REG_RW_MOT_DONE] |= (1 << channel);
                 }
             }
         }
@@ -141,27 +179,6 @@ void motor_update(int16_t bemf_val, pid_struct * pids, uint8_t channel, uint8_t 
         static const uint16_t max_cmd = 400;
         if (cmd > max_cmd) cmd = max_cmd;
         if (cmd < -max_cmd) cmd = -max_cmd;
-
-        // TODO: more concise way of this?
-        // something like   ~(0b11 << (6- 2*channel))
-        uint8_t dir_mask = 0xff;
-        switch(channel)
-        {
-            case 0:
-                dir_mask = 0b11111100;
-                break;
-            case 1:
-                dir_mask = 0b11110011;
-                break;
-            case 2:
-                dir_mask = 0b11001111;
-                break;
-            case 3:
-                dir_mask = 0b00111111;
-                break;
-            default:
-                break;
-        }
 
         // handle direction
         if (cmd < 0)
@@ -296,8 +313,8 @@ void TIM1_CC_IRQHandler(void)
         uint32_t mot1_cmd = (((uint32_t)aTxBuffer[REG_RW_MOT_1_PWM_H]) << 8) | ((uint32_t)aTxBuffer[REG_RW_MOT_1_PWM_L]);
         uint32_t mot2_cmd = (((uint32_t)aTxBuffer[REG_RW_MOT_2_PWM_H]) << 8) | ((uint32_t)aTxBuffer[REG_RW_MOT_2_PWM_L]);
         
-        TIM_SetCompare1(TIM1, mot0_cmd);
-        TIM_SetCompare2(TIM1, mot1_cmd);      
+        TIM_SetCompare1(TIM1, mot1_cmd);
+        TIM_SetCompare2(TIM1, mot0_cmd);      
         TIM_SetCompare3(TIM1, mot2_cmd);
     }
 }

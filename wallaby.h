@@ -1,7 +1,7 @@
 // use a board definition file
 // makes it easier to switch things like processor model, board revision, etc 
 #include "wallaby_r2.h"
-#include "wallaby_spi_r2.h"
+#include "wallaby_spi_r3.h"
 
 #include "wallaby_adc.h"
 #include "wallaby_bemf.h"
@@ -29,6 +29,8 @@
 
 #ifndef WALLABY_H_
 #define WALLABY_H_
+
+#define WALLABY_FIRMWARE_VERSION_R  2
 
 #define BUFFERSIZE                       REG_READABLE_COUNT
 

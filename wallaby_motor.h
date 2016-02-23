@@ -10,7 +10,7 @@ void update_motor_modes();
 
 void idle_motor_dirs();
 
-void motor_update(int16_t bemf_val, pid_struct * pids, uint8_t channel, uint8_t motor_mode);
+void motor_update(int16_t bemf_val, int16_t bemf_val_filt, pid_struct * pids, uint8_t channel, uint8_t motor_mode);
 
 
 void TIM1_Configuration(void);
