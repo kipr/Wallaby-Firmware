@@ -206,10 +206,10 @@ void handle_dma()
                 // TODO: cleanup
                 if (address == REG_RW_MOT_MODES)
                 {
-                    if ((value && 0b00000011) !=  (aTxBuffer[REG_RW_MOT_MODES] && 0b00000011)) aTxBuffer[REG_RW_MOT_DONE] &= ~1;
-                    if ((value && 0b00001100) !=  (aTxBuffer[REG_RW_MOT_MODES] && 0b00001100)) aTxBuffer[REG_RW_MOT_DONE] &= ~2;
-                    if ((value && 0b00110000) !=  (aTxBuffer[REG_RW_MOT_MODES] && 0b00110000)) aTxBuffer[REG_RW_MOT_DONE] &= ~4;
-                    if ((value && 0b11000000) !=  (aTxBuffer[REG_RW_MOT_MODES] && 0b11000000)) aTxBuffer[REG_RW_MOT_DONE] &= ~8;
+                    if (value & 0b00000011) aTxBuffer[REG_RW_MOT_DONE] &= ~1;
+                    if (value & 0b00001100) aTxBuffer[REG_RW_MOT_DONE] &= ~2;
+                    if (value & 0b00110000) aTxBuffer[REG_RW_MOT_DONE] &= ~4;
+                    if (value & 0b11000000) aTxBuffer[REG_RW_MOT_DONE] &= ~8;
                 }
 
                 aTxBuffer[address] = value;
