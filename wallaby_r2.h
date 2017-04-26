@@ -235,6 +235,7 @@
 #define SPI4_MOSI_SOURCE      GPIO_PinSource14
 #define SPI4_MOSI_PORT        GPIOE
 #define SPI4_CS0              GPIO_Pin_11 
+#define SPI4_CS0_SOURCE       GPIO_PinSource11
 #define SPI4_CS0_PORT         GPIOE
 #define SPI4_NIRQ             GPIO_Pin_0 
 #define SPI4_NIRQ_PORT        GPIOD
