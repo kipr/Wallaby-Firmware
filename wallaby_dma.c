@@ -246,10 +246,10 @@ void handle_dma()
         }
         else
         {
-            //debug_printf("got bad spi packet with start %d version %d tot %d\n", aRxBuffer[0], aRxBuffer[1], aRxBuffer[REG_READABLE_COUNT-1]);
+            debug_printf("got bad spi packet with start %d version %d tot %d\n", aRxBuffer[0], aRxBuffer[1], aRxBuffer[REG_READABLE_COUNT-1]);
             if (aRxBuffer[1] == WALLABY_SPI_VERSION)
             {
-                //debug_printf("SPI protocol version mismatch\n");
+               debug_printf("SPI protocol version mismatch\n");
             }
         }
         // Clear DMA Transfer Complete Flags so we can notice when a transfer happens again

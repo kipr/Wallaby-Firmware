@@ -74,7 +74,7 @@ int main()
             //readAccel();
             //readMag();
             //readGyro();   
-            readIMU();
+            if(count%1000==0)readIMU();
 
             if (batt < 636) // about 5.75 volts
             {

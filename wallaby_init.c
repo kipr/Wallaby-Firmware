@@ -297,21 +297,22 @@ void init()
     initSPI3(); 
 
     // Init SPI4 (SPI header)
-    initSPI4(); 
-  
-    setup_I2C1();
+    //initSPI4(); 
+ 
+    //setup_I2C1();
+   
     // wait a bit
     delay_us(5000);
 
     //setupAccelMag();
 
     //setupGyro();
-
+    debug_printf("calling setupIMU()\r\n");
     setupIMU();
-
+/*
     setupUART2();
     setupUART3();
-
+*/
     // wait a bit
     delay_us(5);
 }

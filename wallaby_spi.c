@@ -65,7 +65,7 @@ void initSPI3()
         SPI_InitStruct.SPI_CPOL = SPI_CPOL_Low;
         SPI_InitStruct.SPI_CPHA = SPI_CPHA_1Edge;
         SPI_InitStruct.SPI_NSS = SPI_NSS_Soft | SPI_NSSInternalSoft_Set;
-        SPI_InitStruct.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_64;
+        SPI_InitStruct.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_128;
         SPI_InitStruct.SPI_FirstBit = SPI_FirstBit_MSB;
         SPI_Init(SPI3, &SPI_InitStruct);
     }

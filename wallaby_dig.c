@@ -41,6 +41,20 @@ void update_dig_pin_from_reg(uint32_t pin, GPIO_TypeDef* port, uint8_t output_en
         GPIO_InitStructure.GPIO_OType = GPIO_OType_OD;
     }
 
+#ifdef WALLABY2
+
+    // Wallaby22
+    if (pullup_enable)
+    {
+        GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;
+    }
+    else
+    {
+        GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
+    }
+#else
+
+    // Wallaby1
     if (pullup_enable)
     {
         GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
@@ -49,6 +63,8 @@ void update_dig_pin_from_reg(uint32_t pin, GPIO_TypeDef* port, uint8_t output_en
     {
         GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
     }
+#endif
+
 
     GPIO_Init(port, &GPIO_InitStructure);
 }

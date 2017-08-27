@@ -17,6 +17,11 @@
 #include "wallaby_uart.h"
 
 
+// Wallaby2
+#ifndef WALLABY2
+#define WALLABY2
+#endif
+
 
 #ifdef USE_CROSS_STUDIO_DEBUG
     #include <__cross_studio_io.h>
