@@ -1,6 +1,164 @@
 #include "wallaby_imu.h"
 #include "wallaby.h"
 
+#define WALLABY2
+
+#define MPU9250_WHO_AMI_I_REG  0x75
+#define MPU9250_WHO_AMI_I_RES  0x71
+
+void setupIMU()
+{
+
+    // select Accel/Mag
+    SPI3_CS0_PORT->BSRRH |= SPI3_CS0; // chip select low
+    delay_us(100); 
+
+    uint8_t regval;
+    // request "Who am I)
+    SPI3_write(0x80 | MPU9250_WHO_AMI_I_REG);//0x8F); // write register
+    regval = SPI3_write(0x00); // write dummy val to get contents
+    SPI3_CS0_PORT->BSRRL |= SPI3_CS0; // chip select high
+
+    if (regval == MPU9250_WHO_AMI_I_RES){ //mpu9250
+        debug_printf("IMU identified itself\n");
+    }else{
+        debug_printf("IMU did not respond/identify itself (regval=%d)\n",regval);
+        return;
+    }
+
+    // wake up
+    SPI3_CS0_PORT->BSRRH |= SPI3_CS0; // chip select low
+    SPI3_write(0x6B); // power management 1
+    regval = SPI3_write(0x00); // 50hz continuous, all axes
+    SPI3_CS0_PORT->BSRRL |= SPI3_CS0; // done with chip
+    delay_us(100);
+    
+    SPI3_CS0_PORT->BSRRH |= SPI3_CS0; // chip select low
+    SPI3_write(0x6B); // power management 1
+    regval = SPI3_write(0x01); // select time source
+    SPI3_CS0_PORT->BSRRL |= SPI3_CS0; // done with chip
+    delay_us(200);
+
+
+    SPI3_CS0_PORT->BSRRH |= SPI3_CS0; // chip select low
+    SPI3_write(0x1A); // config
+    regval = SPI3_write(0x03);
+    SPI3_CS0_PORT->BSRRL |= SPI3_CS0; // done with chip
+
+
+    SPI3_CS0_PORT->BSRRH |= SPI3_CS0; // chip select low
+    SPI3_write(0x19); // samplerate div
+    regval = SPI3_write(0x04); // 200 Hz
+    SPI3_CS0_PORT->BSRRL |= SPI3_CS0; // done with chip
+
+    // accel config
+    SPI3_CS0_PORT->BSRRH |= SPI3_CS0; // chip select low
+    SPI3_write(0x80 | 0x1C); // accel config
+    regval = SPI3_write(0x00); // just read 
+    SPI3_CS0_PORT->BSRRL |= SPI3_CS0; // done with chip
+
+    regval &= (~0x02);
+    regval &= (~0x18);
+    // fchoice unchanges
+    debug_printf("accel config = %x\r\n",regval);
+    SPI3_CS0_PORT->BSRRH |= SPI3_CS0; // chip select low
+    SPI3_write(0x80 | 0x1C); // accel config
+    SPI3_write(regval); // just read 
+    SPI3_CS0_PORT->BSRRL |= SPI3_CS0; // done with chip
+
+
+    // gyro config
+    
+/*
+    // accel
+    SPI3_CS0_PORT->BSRRH |= SPI3_CS0; // chip select low
+    SPI3_write(0x20);
+    SPI3_write(0x57); // 50hz continuous, all axes
+    SPI3_CS0_PORT->BSRRL |= SPI3_CS0; // done with chip
+
+    SPI3_CS0_PORT->BSRRH |= SPI3_CS0; // chip select low
+    SPI3_write(0x21);
+    SPI3_write(0x00);  // 773Hz filter, +/- 2g scale, no self test, full duplex SPI
+    SPI3_CS0_PORT->BSRRL |= SPI3_CS0; // done with chip
+
+    // accel data ready on int1
+    SPI3_CS0_PORT->BSRRH |= SPI3_CS0;
+    SPI3_write(0x22);
+    SPI3_write(0b00000100);
+    SPI3_CS0_PORT->BSRRL |= SPI3_CS0; // done with chip
+
+    // mag data ready on int1
+    SPI3_CS0_PORT->BSRRH |= SPI3_CS0;
+    SPI3_write(0x23);
+    SPI3_write(0b00000100);
+    SPI3_CS0_PORT->BSRRL |= SPI3_CS0; // done with chip
+
+    // magnetometer
+    SPI3_CS0_PORT->BSRRH |= SPI3_CS0; // chip select low
+    SPI3_write(0x24);
+    SPI3_write(0x70); // temp disabled, high res, 50Hz, no interrupts
+    SPI3_CS0_PORT->BSRRL |= SPI3_CS0; // done with chip
+
+    SPI3_CS0_PORT->BSRRH |= SPI3_CS0; // chip select low
+    SPI3_write(0x25);
+    SPI3_write(0x20);  // +/- 4g
+    SPI3_CS0_PORT->BSRRL |= SPI3_CS0; // done with chip
+
+    SPI3_CS0_PORT->BSRRH |= SPI3_CS0; // chip select low
+    SPI3_write(0x26);
+    SPI3_write(0x00);  // normal
+    SPI3_CS0_PORT->BSRRL |= SPI3_CS0; // done with chip
+*/
+}
+
+void readIMU()
+{
+    uint16_t accel_x, accel_y, accel_z;
+
+    // accel x
+    SPI3_CS0_PORT->BSRRH |= SPI3_CS0; // chip select low
+    SPI3_write(0x80 | 0x3B);
+    accel_x = ((uint16_t)SPI3_write(0x00) << 8);
+    SPI3_CS0_PORT->BSRRL |= SPI3_CS0; // done with chip
+  
+    SPI3_CS0_PORT->BSRRH |= SPI3_CS0; // chip select low
+    SPI3_write(0x80 | 0x3C);
+    accel_x |= SPI3_write(0x00);
+    SPI3_CS0_PORT->BSRRL |= SPI3_CS0; // done with chip
+
+    // accel y
+    SPI3_CS0_PORT->BSRRH |= SPI3_CS0; // chip select low
+    SPI3_write(0x80 | 0x3D);
+    accel_y = ((uint16_t)SPI3_write(0x00) << 8);
+    SPI3_CS0_PORT->BSRRL |= SPI3_CS0; // done with chip
+  
+    SPI3_CS0_PORT->BSRRH |= SPI3_CS0; // chip select low
+    SPI3_write(0x80 | 0x3E);
+    accel_y |= SPI3_write(0x00);
+    SPI3_CS0_PORT->BSRRL |= SPI3_CS0; // done with chip
+
+
+    // accel z
+    SPI3_CS0_PORT->BSRRH |= SPI3_CS0; // chip select low
+    SPI3_write(0x80 | 0x3F);
+    accel_z = ((uint16_t)SPI3_write(0x00) << 8);
+    SPI3_CS0_PORT->BSRRL |= SPI3_CS0; // done with chip
+  
+    SPI3_CS0_PORT->BSRRH |= SPI3_CS0; // chip select low
+    SPI3_write(0x80 | 0x40);
+    accel_z |= SPI3_write(0x00);
+    SPI3_CS0_PORT->BSRRL |= SPI3_CS0; // done with chip
+  
+    aTxBuffer[REG_RW_ACCEL_X_H]  = (accel_x & 0xFF00) >> 8;
+    aTxBuffer[REG_RW_ACCEL_X_L] = (accel_x & 0x00FF);
+    aTxBuffer[REG_RW_ACCEL_Y_H] = (accel_y & 0xFF00) >> 8;
+    aTxBuffer[REG_RW_ACCEL_Y_L] = (accel_y & 0x00FF);
+    aTxBuffer[REG_RW_ACCEL_Z_H] = (accel_z & 0xFF00) >> 8;
+    aTxBuffer[REG_RW_ACCEL_Z_L] = (accel_z & 0x00FF);
+
+//    debug_printf("%d %d %d\r\n", accel_x, accel_y, accel_z);
+}
+
 
 void setupAccelMag()
 {
@@ -18,9 +176,9 @@ void setupAccelMag()
     SPI3_CS0_PORT->BSRRL |= SPI3_CS0; // chip select low
 
     if (regval == 73){
-        //debug_printf("Accel/Magn identified itself\n");
+        debug_printf("Accel/Magn identified itself\n");
     }else{
-        //debug_printf("Accel/Magn did not respond/identify itself (regval=%d)\n",regval);
+        debug_printf("Accel/Magn did not respond/identify itself (regval=%d)\n",regval);
         return;
     }
 

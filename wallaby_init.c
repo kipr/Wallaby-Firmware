@@ -293,7 +293,6 @@ void init()
     // TODO: make this another digital pin
     configDigitalInPin(BUTTON_S1_PIN, BUTTON_S1_PORT);
 
-
     // Init SPI3 (plus chip selects) for the IMU sensors
     initSPI3(); 
 
@@ -301,17 +300,17 @@ void init()
     initSPI4(); 
   
     setup_I2C1();
-
     // wait a bit
     delay_us(5000);
 
-    setupAccelMag();
+    //setupAccelMag();
 
-    setupGyro();
+    //setupGyro();
+
+    setupIMU();
 
     setupUART2();
     setupUART3();
-    
 
     // wait a bit
     delay_us(5);

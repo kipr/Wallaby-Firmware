@@ -33,6 +33,7 @@ int main()
 
     // set up pid structs
     pid_struct pid_structs[4];
+
     {        uint8_t i;
         for (i = 0; i < 4; ++i) init_pid_struct(&(pid_structs[i]), i);
     }
@@ -43,6 +44,7 @@ int main()
     //debug_printf("starting\n");
     int low_volt_alarmed = 0;
 
+ 
     // Loop until button is pressed
     uint32_t count = 0;
     while (1)
@@ -69,9 +71,10 @@ int main()
             uint32_t before = usCount;
             update_dig_pins();
             int16_t batt = adc_update();
-            readAccel();
-            readMag();
-            readGyro();   
+            //readAccel();
+            //readMag();
+            //readGyro();   
+            readIMU();
 
             if (batt < 636) // about 5.75 volts
             {
@@ -138,6 +141,8 @@ int main()
                 // sleep a bit so that our time through the loop is consistent for PID control
                 delay_us(222);
             }
+
+            //aTxBuffer[REG_RW_MOT_SRV_ALLSTOP] = 0;//FIXME: remove
         }
     } 
 

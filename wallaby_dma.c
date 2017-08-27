@@ -10,16 +10,6 @@ void SPI_DMA_Config(unsigned int buffer_len)
     DMA_InitTypeDef DMA_InitStructure;
     SPI_InitTypeDef SPI_InitStructure;
 
-    // Peripheral Clock Enable -------------------------------------------------
-    // Enable the SPI clock 
-    RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2, ENABLE);
-
-    // Enable GPIO clocks 
-    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
-
-    // Enable DMA clock 
-    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_DMA1, ENABLE);
-
 
     // SPI GPIO Configuration --------------------------------------------------
     // GPIO Deinitialisation
@@ -34,25 +24,43 @@ void SPI_DMA_Config(unsigned int buffer_len)
     GPIO_PinAFConfig(SPI2_MOSI_PORT, SPI2_MOSI_SOURCE, GPIO_AF_SPI2);
     GPIO_PinAFConfig(SPI2_CS0_PORT, SPI2_CS0_SOURCE, GPIO_AF_SPI2);
 
+    // SPI  MISO pin configuration
+    GPIO_InitStructure.GPIO_Pin =  SPI2_MISO;
+    
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
     GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_DOWN;
 
-    // SPI SCK pin configuration
-    GPIO_InitStructure.GPIO_Pin = SPI2_CLK;
-    GPIO_Init(SPI2_CLK_PORT, &GPIO_InitStructure);
+    GPIO_Init(SPI2_MISO_PORT, &GPIO_InitStructure);
 
-    // SPI  MISO pin configuration
-    GPIO_InitStructure.GPIO_Pin =  SPI2_MISO;
-    GPIO_Init(SPI2_MISO_PORT, &GPIO_InitStructure); 
+
+
 
     // SPI  MOSI pin configuration
     GPIO_InitStructure.GPIO_Pin =  SPI2_MOSI;
+    //GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+    //GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    //GPIO_InitStructure.GPIO_OType = GPIO_OType_OD;
+    //GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_NOPULL;
     GPIO_Init(SPI2_MOSI_PORT, &GPIO_InitStructure);
 
+
+    // SPI SCK pin configuration
+    //    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    //GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+    //GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_DOWN;
+    GPIO_InitStructure.GPIO_Pin = SPI2_CLK;
+    GPIO_Init(SPI2_CLK_PORT, &GPIO_InitStructure);
+
+
+
     GPIO_InitStructure.GPIO_Pin =  SPI2_CS0;
+     //   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    //GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+    //GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_DOWN;
     GPIO_Init(SPI2_CS0_PORT, &GPIO_InitStructure);
+
 
     // SPI configuration -------------------------------------------------------
     SPI_I2S_DeInit(SPI2);
@@ -60,9 +68,22 @@ void SPI_DMA_Config(unsigned int buffer_len)
     SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b;
     SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;
     SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;
-    SPI_InitStructure.SPI_NSS = SPI_NSS_Soft; // | SPI_NSSInternalSoft_Set;
+    SPI_InitStructure.SPI_NSS = SPI_NSS_Hard;
     SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_2;
     SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;
+
+
+    // Peripheral Clock Enable -------------------------------------------------
+    // Enable the SPI clock 
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2, ENABLE);
+
+    // Enable GPIO clocks 
+    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
+
+    // Enable DMA clock 
+    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_DMA1, ENABLE);
+
+
 
     // DMA configuration -------------------------------------------------------
     // Deinitialize DMA Streams
