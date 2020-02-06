@@ -1,6 +1,6 @@
 // Author: Joshua Southerland (2015)
 
-#define USE_CROSS_STUDIO_DEBUG
+//#define USE_CROSS_STUDIO_DEBUG
 
 // STM32F405RG (see stm32f4xx.h to change target device)
 // you have to uncomment one of the options, I chose:
